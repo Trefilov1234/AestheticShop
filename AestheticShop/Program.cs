@@ -12,6 +12,7 @@ builder.Services.AddDbContext<ShopDbContext>(option =>
 });
 var app = builder.Build();
 
+ShopDbInitializer.seed(app);
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {

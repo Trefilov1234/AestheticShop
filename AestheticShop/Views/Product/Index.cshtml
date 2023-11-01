@@ -2,33 +2,66 @@
     ViewData["Title"] = "Home Page";
 }
 
-@model IEnumerable<Product>
+@model IndexViewModel
 
+<div class="row">
 
-    @if (TempData.ContainsKey("status"))
-{
-    
-    <div class="alert alert-warning alert-dismissible fade show" role="alert">
-  <strong>Products!</strong>@TempData["status"]
-  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-</div>
-}
+    <div class="col-2">
+        <div class="row">
+            <h3>Categories</h3>
+            <hr />
+            <div class="list-group">
+                @if (Model.Categories != null)
+                {
+                    foreach (var item in @Model.Categories)
+                    {
+                        <a href="#" class="list-group-item list-group-item-action">@item.Name</a>
+                    }
+                }
 
-@if (Model != null && Model.Count() > 0)
-{
-    <div class="row">
-        @foreach (var item in Model)
+            </div>
+        </div>
+
+        <div class="row">
+            <h3>Tags</h3>
+            <hr />
+            <div class="list-group">
+                @if (Model.Tags != null)
+                {
+                    foreach (var item in @Model.Tags)
+                    {
+                        <a href="#" class="list-group-item list-group-item-action">@item.Name</a>
+                    }
+                }
+
+            </div>
+        </div>
+    </div>
+    <div class="col-10">
+        @if (TempData.ContainsKey("status"))
         {
-            <div class="card col-4" style="width: 18rem;">
-                <img src="@item.ImageUrl" class="card-img-top" alt="...">
-                <div class="card-body">
-                    <h5 class="card-title">@item.Name</h5>
-                    <p class="card-text">@item.Description</p>
-                    <p class="card-text">@item.Category</p>
-                    <span>@item.Rating</span>
-                    @*<a href="#" class="btn btn-primary">Go somewhere</a>*@
-                </div>
+
+            <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                <strong>Messages!</strong>@TempData["status"].
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        }
+
+        @if (Model.Products != null && Model.Products.Count() > 0)
+        {
+            <div class="row">
+                @foreach (var item in Model.Products)
+                {
+                    <div class="card col-4" style="width: 18rem;">
+                        <img src="@item.ImageUrl" class="card-img-top" alt="...">
+                        <div class="card-body">
+                            <h5 class="card-title">@item.Name</h5>
+                            <p class="card-text">@Html.Raw(@item.Description)</p>
+                            <span>@item.Category.Name</span>
+                        </div>
+                    </div>
+                }
             </div>
         }
     </div>
-}
+</div>
