@@ -8,5 +8,6 @@ namespace AestheticShop.ViewModels
         public IEnumerable<Product> Products { get; set; }
         public IEnumerable<Category> Categories { get; set; }
         public IEnumerable<Tag> Tags { get; set; }
+
     }
 }
