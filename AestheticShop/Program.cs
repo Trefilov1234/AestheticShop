@@ -12,7 +12,7 @@ builder.Services.AddDbContext<ShopDbContext>(option =>
 });
 var app = builder.Build();
 
-ShopDbInitializer.seed(app);
+ShopDbInitializer.Seed(app);
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {
@@ -29,7 +29,11 @@ app.UseRouting();
 app.UseAuthorization();
 
 app.MapControllerRoute(
+    name: "admin",
+    pattern: "{area}/{controller=Home}/{action=Index}");
+app.MapControllerRoute(
     name: "default",
+    //pattern: "{controller=Product}/{action=Index}/{categoryId?}/{tagId?}");
     pattern: "{controller=Product}/{action=Index}/{id?}");
 
 app.Run();

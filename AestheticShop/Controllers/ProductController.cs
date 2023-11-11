@@ -18,6 +18,15 @@ namespace AestheticShop.Controllers
             this.shopDbContext = shopDbContext;
         }
         [HttpGet]
+        public IActionResult Reset()
+        {
+
+            var products = shopDbContext.Products;
+
+
+            return RedirectToAction("Index", products);
+        }
+        [HttpGet]
         public IActionResult Edit(int id)
         {
 
@@ -30,12 +39,28 @@ namespace AestheticShop.Controllers
 
             return View(products);
         }
+        [HttpGet]
+        public IActionResult Delete(int id)
+        {
 
+            var products = shopDbContext.Products.Find(id);
+            return View(products);
+        }
+        [HttpPost]
+        [ActionName("Delete")]
+        public async Task<IActionResult> ConfirmedDelete(int id)
+        {
+            var products = shopDbContext.Products.Find(id);
+            shopDbContext.Products.Remove(products);
+            await shopDbContext.SaveChangesAsync();
+            TempData["status"] = "Product deleted!";
+            return RedirectToAction("Index");
+        }
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(Product product, IFormFile Image, int[] tags)
         {
-
+     
             if (Image != null)
             {
                 var path = await FileUploadHelper.UploadAsync(Image);
@@ -74,13 +99,36 @@ namespace AestheticShop.Controllers
         }
 
         [HttpGet]
-        public IActionResult Index()
+        public IActionResult Index(int? categoryId = null, int? tagId = null, int page = 1)
         {
-            var products = shopDbContext.Products.Include(x => x.ProductTags).ThenInclude(x => x.Tag).Include(x => x.Category); ;
-            var categories = shopDbContext.Categories;
-            var tags = shopDbContext.Tags;
+            var products = shopDbContext.Products.Include(x => x.ProductTags).ThenInclude(x => x.Tag).Include(x => x.Category).OrderByDescending(x => x.Id);
 
-            var model = new IndexViewModel() { Categories = categories, Products = products,Tags=tags };
+            if (categoryId != null)
+            {
+                products = (IOrderedQueryable<Product>)products.Where(x => x.CategoryId == categoryId);
+            }
+
+            if (tagId != null)
+            {
+                //var postIdsByTag = blogDbContext.PostTags.Where(pt => pt.TagId == tagId).Select(x=>x.PostId);
+                //posts = (IOrderedQueryable<Post>)posts.Where(p =>postIdsByTag.Contains(p.Id));
+                products = (IOrderedQueryable<Product>)products.Where(x => x.ProductTags.Any(x => x.TagId == tagId));
+            }
+            var model = new IndexViewModel();
+            int totalPages=(int)Math.Ceiling(products.Count() / (double)model.LimitPage);
+            products = (IOrderedQueryable<Product>)products.Skip((page-1)* model.LimitPage).Take(model.LimitPage);
+
+
+            model.Categories = shopDbContext.Categories;
+            model.Products = products;
+            model.Tags = shopDbContext.Tags;
+            model.RecentProducts = shopDbContext.Products.OrderByDescending(x => x.Id).Take(model.LimitPage);
+            model.CurrentPage = page;
+            model.TotalPages = totalPages;
+            model.SelectedCategoryId = categoryId;
+            model.SelectedTagId = tagId;
+            
+            //return View("Privacy", model);
             return View(model);
         }
         [HttpGet]
@@ -115,9 +163,6 @@ namespace AestheticShop.Controllers
                 await shopDbContext.SaveChangesAsync();
                 return RedirectToAction("Index");
             }
-            
-
-
             return RedirectToAction("Index");
         }
     }

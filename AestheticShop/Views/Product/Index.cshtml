@@ -4,21 +4,32 @@
 
 @model IndexViewModel
 
+@* @await Component.InvokeAsync("Pagination",new {currentPages=1}) *@
+<vc:pagination 
+current-page="@Model.CurrentPage" 
+total-pages="@Model.TotalPages" 
+action="Index" 
+controller="Product"
+limit="@Model.LimitPage"
+tag-id="@Model.SelectedTagId"
+category-id="@Model.SelectedCategoryId"></vc:pagination>
 <div class="row">
 
     <div class="col-2">
+        <a class="btn btn-outline-info" asp-controller="Product" asp-action="Index">Reset</a>
+        <hr />
         <div class="row">
+            
             <h3>Categories</h3>
-            <hr />
             <div class="list-group">
                 @if (Model.Categories != null)
                 {
                     foreach (var item in @Model.Categories)
                     {
-                        <a href="#" class="list-group-item list-group-item-action">@item.Name</a>
+                        <a asp-action="Index" asp-controller="Product" asp-route-categoryId="@item.Id" asp-route-tagId="@Model.SelectedTagId"
+                           class="list-group-item list-group-item-action @(Model.SelectedCategoryId==item.Id ? "active" : ' ') ">@item.Name</a>
                     }
                 }
-
             </div>
         </div>
 
@@ -30,7 +41,8 @@
                 {
                     foreach (var item in @Model.Tags)
                     {
-                        <a href="#" class="list-group-item list-group-item-action">@item.Name</a>
+                        <a asp-action="Index" asp-controller="Product" asp-route-tagId="@item.Id" asp-route-categoryId="@Model.SelectedCategoryId"
+                           class="list-group-item list-group-item-action @(Model.SelectedTagId==item.Id ? "active" : ' ') ">@item.Name</a>
                     }
                 }
 
@@ -71,13 +83,19 @@
                             <hr>
                             <span>@item.Category.Name</span>
                             <p class="card-text">@Html.Raw(@item.Description)</p>
+                            <span>Rating: @item.Rating</span>
                             <br>
                             <a asp-action="Details" asp-controller="Product" asp-route-id="@item.Id" class="btn btn-primary">Details</a>
                             <a asp-action="Edit" asp-controller="Product" asp-route-id="@item.Id" class="btn btn-primary">Edit</a>
+                            <a asp-action="Delete" asp-controller="Product" asp-route-id="@item.Id" class="btn btn-primary">Delete</a>
                         </div>
                     </div>
                 }
             </div>
+        }
+        else if (@Model.Products.Count() == 0)
+        {
+            <h3>Not found</h3>
         }
     </div>
 </div>
