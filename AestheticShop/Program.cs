@@ -1,3 +1,5 @@
+using AestheticShop.Areas.Admin.Services;
+using AestheticShop.Middlewares;
 using AestheticShop.Models;
 using Microsoft.EntityFrameworkCore;
 
@@ -5,14 +7,15 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
-
+builder.Services.AddSingleton<MailSenderService>();
 builder.Services.AddDbContext<ShopDbContext>(option =>
 {
     option.UseSqlServer(builder.Configuration.GetConnectionString("SqlServer"));
 });
 var app = builder.Build();
-
-ShopDbInitializer.Seed(app);
+app.UseStaticFiles();
+//app.UseMiddleware<KeyMiddleware>();
+//ShopDbInitializer.Seed(app);
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {
@@ -22,7 +25,7 @@ if (!app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-app.UseStaticFiles();
+
 
 app.UseRouting();
 
@@ -30,7 +33,7 @@ app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "admin",
-    pattern: "{area}/{controller=Home}/{action=Index}");
+    pattern: "{area:exists}/{controller=Home}/{action=Index}");
 app.MapControllerRoute(
     name: "default",
     //pattern: "{controller=Product}/{action=Index}/{categoryId?}/{tagId?}");

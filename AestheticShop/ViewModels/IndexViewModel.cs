@@ -14,6 +14,6 @@ namespace AestheticShop.ViewModels
         public int? SelectedCategoryId { get; set; }
         public int? SelectedTagId { get; set; }
         public int TotalPages { get; set; }
-        public int LimitPage { get; set; } = 2;
+        public int LimitPage { get; set; } = 3;
     }
 }

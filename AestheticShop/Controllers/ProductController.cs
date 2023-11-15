@@ -153,16 +153,16 @@ namespace AestheticShop.Controllers
             {
                 Console.WriteLine(ex);
             }
-            if (ModelState.IsValid)
-            {
+            //if (ModelState.IsValid)
+            //{
                 TempData["status"] = "New product added!";
                 await shopDbContext.Products.AddAsync(product);
                 await shopDbContext.SaveChangesAsync();
                 shopDbContext.ProductTags.AddRange(tags.Select(x => new ProductTag { ProductId = product.Id, TagId = x }));
 
                 await shopDbContext.SaveChangesAsync();
-                return RedirectToAction("Index");
-            }
+            //    return RedirectToAction("Index");
+            //}
             return RedirectToAction("Index");
         }
     }

@@ -22,7 +22,10 @@
     </ul>
     <div class="card-body">
         <span class="card-link">@Html.Raw(@Model.Description)</span>
-        <a asp-action="Index" asp-controller="Product" class="card-link">Back</a>
+        
     </div>
+    <span>Rating: @Model.Rating</span>
+    <span>Price: @Model.Price</span>
+    <a asp-action="Index" asp-controller="Product" class="card-link">Back</a>
 </div>
 
