@@ -1,8 +1,10 @@
 ﻿using AestheticShop.Extensions;
 using AestheticShop.Helpers;
 using AestheticShop.Models;
+using AestheticShop.Services;
 using AestheticShop.ViewModels;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -13,10 +15,13 @@ namespace AestheticShop.Controllers
     public class ProductController:Controller
     {
         private readonly ShopDbContext shopDbContext;
-        public ProductController(ShopDbContext shopDbContext)
+		private readonly IUserManager userManager;
+
+		public ProductController(ShopDbContext shopDbContext,IUserManager userManager)
         {
             this.shopDbContext = shopDbContext;
-        }
+			this.userManager = userManager;
+		}
         [HttpGet]
         public IActionResult Reset()
         {
@@ -101,7 +106,8 @@ namespace AestheticShop.Controllers
         [HttpGet]
         public IActionResult Index(int? categoryId = null, int? tagId = null, int page = 1)
         {
-            var products = shopDbContext.Products.Include(x => x.ProductTags).ThenInclude(x => x.Tag).Include(x => x.Category).OrderByDescending(x => x.Id);
+			ViewBag.UserName = userManager.CurrentUser?.Login ?? "Guest";
+			var products = shopDbContext.Products.Include(x => x.ProductTags).ThenInclude(x => x.Tag).Include(x => x.Category).OrderByDescending(x => x.Id);
 
             if (categoryId != null)
             {

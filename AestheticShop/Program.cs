@@ -1,6 +1,7 @@
 using AestheticShop.Areas.Admin.Services;
 using AestheticShop.Middlewares;
 using AestheticShop.Models;
+using AestheticShop.Services;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -12,8 +13,12 @@ builder.Services.AddDbContext<ShopDbContext>(option =>
 {
     option.UseSqlServer(builder.Configuration.GetConnectionString("SqlServer"));
 });
+builder.Services.AddHttpContextAccessor();
+builder.Services.AddScoped<IUserManager, UserManager>();
+
 var app = builder.Build();
 app.UseStaticFiles();
+app.UseMiddleware<AuthMiddleware>();
 //app.UseMiddleware<KeyMiddleware>();
 //ShopDbInitializer.Seed(app);
 // Configure the HTTP request pipeline.
