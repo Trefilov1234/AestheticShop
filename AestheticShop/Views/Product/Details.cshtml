@@ -7,8 +7,8 @@
 
 <h1>Details</h1>
 
-<div class="card">
-    <img src="@Model.ImageUrl" class="card-img-top" alt="...">
+<div class="card" style="width: 18rem; margin: 0 auto;">
+    <img src="@Model.ImageUrl" onerror="event.target.src='/images/placeholder.png'" class="card-img-top" alt="...">
     <div class="card-body">
         <h5 class="card-title">@Model.Name</h5>
         <p class="card-text">@Model.Category.Name</p>

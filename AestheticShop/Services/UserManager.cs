@@ -48,24 +48,24 @@ namespace AestheticShop.Services
 
 		public bool Login(string userName, string password)
 		{
-			var passwordHash = SHA256Encriptor.Encript(password);
+			//var passwordHash = SHA256Encriptor.Encript(password);
 
-			var user = _shopDbContext.Users.FirstOrDefault(u => u.Login == userName && u.PasswordHash == passwordHash);
-			if (user != null)
-			{
-				//  HttpContext.Response.Cookies.Append("auth", loginView.Login);
-				UserCredentials userCrededantials = new UserCredentials()
-				{
-					Login = user.Login,
-					IsAdmin = user.IsAdmin,
-					Expiration = DateTime.Now + TimeSpan.FromMinutes(1)
+			//var user = _shopDbContext.Users.FirstOrDefault(u => u.Login == userName && u.PasswordHash == passwordHash);
+			//if (user != null)
+			//{
+			//	//  HttpContext.Response.Cookies.Append("auth", loginView.Login);
+			//	UserCredentials userCrededantials = new UserCredentials()
+			//	{
+			//		Login = user.Login,
+			//		IsAdmin = user.IsAdmin,
+			//		Expiration = DateTime.Now + TimeSpan.FromMinutes(1)
 
-				};
-				var userCred = JsonSerializer.Serialize(userCrededantials);
-				var hash = AesOperation.EncryptString("b14ca5898a4e4133bbce2ea2315a1916", userCred);// шифруем куки
-				httpContextAccessor.HttpContext.Response.Cookies.Append("auth", hash);
-				return true;
-			}
+			//	};
+			//	var userCred = JsonSerializer.Serialize(userCrededantials);
+			//	var hash = AesOperation.EncryptString("b14ca5898a4e4133bbce2ea2315a1916", userCred);// шифруем куки
+			//	httpContextAccessor.HttpContext.Response.Cookies.Append("auth", hash);
+			//	return true;
+			//}
 			return false;
 		}
 	}

@@ -27,25 +27,25 @@ namespace AestheticShop.Controllers
             return View();
         }
 		[HttpPost]
-		public IActionResult Register(RegisterViewModel registerViewModel)
-		{
-			if(ModelState.IsValid)
-			{
-				User newUser = new User()
-				{
-					Login = registerViewModel.Login,
-					PasswordHash = SHA256Encriptor.Encript(registerViewModel.Password),
-					IsAdmin = false
-				};
-				dbContext.Users.Add(newUser);
-				dbContext.SaveChanges();
-				return RedirectToAction("Login", "Auth");
-			}
-			else
-			{
-				return View(registerViewModel);
-			}
-		}
+		//public IActionResult Register(RegisterViewModel registerViewModel)
+		//{
+		//	if(ModelState.IsValid)
+		//	{
+		//		User newUser = new User()
+		//		{
+		//			Login = registerViewModel.Login,
+		//			PasswordHash = SHA256Encriptor.Encript(registerViewModel.Password),
+		//			IsAdmin = false
+		//		};
+		//		dbContext.Users.Add(newUser);
+		//		dbContext.SaveChanges();
+		//		return RedirectToAction("Login", "Auth");
+		//	}
+		//	else
+		//	{
+		//		return View(registerViewModel);
+		//	}
+		//}
 		[HttpGet]
 		public IActionResult Login()
 		{

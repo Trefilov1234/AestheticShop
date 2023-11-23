@@ -14,7 +14,7 @@ limit="@Model.LimitPage"
 tag-id="@Model.SelectedTagId"
 category-id="@Model.SelectedCategoryId"></vc:pagination>
 <div class="row">
-    <h1>@ViewBag.UserName</h1>
+    @* <h1>@ViewBag.UserName</h1> *@
     <div class="col-2">
         <a class="btn btn-outline-info" asp-controller="Product" asp-action="Index">Reset</a>
         <hr />
@@ -65,7 +65,7 @@ category-id="@Model.SelectedCategoryId"></vc:pagination>
                 @foreach (var item in Model.Products)
                 {
                     <div class="card col-4" style="width: 18rem;">
-                        <img src="@item.ImageUrl" class="card-img-top" alt="...">
+                        <img src="@item.ImageUrl" onerror="event.target.src='/images/placeholder.png'" class="card-img-top" alt="...">
                         <div class="card-body">
                             <h5 class="card-title">@item.Name</h5>
                             <hr>
@@ -87,8 +87,8 @@ category-id="@Model.SelectedCategoryId"></vc:pagination>
                             <span>Price: @item.Price</span>
                             <br>
                             <a asp-action="Details" asp-controller="Product" asp-route-id="@item.Id" class="btn btn-primary">Details</a>
-                            <a asp-action="Edit" asp-controller="Product" asp-route-id="@item.Id" class="btn btn-primary">Edit</a>
-                            <a asp-action="Delete" asp-controller="Product" asp-route-id="@item.Id" class="btn btn-primary">Delete</a>
+                            @* <a asp-action="Edit" asp-controller="Product" asp-route-id="@item.Id" class="btn btn-primary">Edit</a>
+                            <a asp-action="Delete" asp-controller="Product" asp-route-id="@item.Id" class="btn btn-primary">Delete</a> *@
                         </div>
                     </div>
                 }

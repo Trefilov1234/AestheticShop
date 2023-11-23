@@ -8,7 +8,7 @@ namespace AestheticShop.Areas.Admin.Services
         public async Task Send(string email, string subject, string content)
         {
             var emailMessage = new MimeMessage();
-            emailMessage.From.Add(new MailboxAddress("AestheticShop", "postmaster@sandbox804c965fe8434b758f45ded045c4aa3d.mailgun.org"));
+            emailMessage.From.Add(new MailboxAddress("AestheticShop1", "postmaster@sandbox804c965fe8434b758f45ded045c4aa3d.mailgun.org"));
             emailMessage.To.Add(new MailboxAddress("Client", email));
             emailMessage.Subject = subject;
             emailMessage.Body = new TextPart(MimeKit.Text.TextFormat.Html) { Text = content };

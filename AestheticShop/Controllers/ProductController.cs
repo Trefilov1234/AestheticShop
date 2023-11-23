@@ -3,6 +3,7 @@ using AestheticShop.Helpers;
 using AestheticShop.Models;
 using AestheticShop.Services;
 using AestheticShop.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -102,7 +103,7 @@ namespace AestheticShop.Controllers
             ViewBag.tags = new MultiSelectList(shopDbContext.Tags, "Id", "Name");
             return View();
         }
-
+        [Authorize]
         [HttpGet]
         public IActionResult Index(int? categoryId = null, int? tagId = null, int page = 1)
         {

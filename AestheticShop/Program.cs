@@ -1,7 +1,11 @@
 using AestheticShop.Areas.Admin.Services;
+using AestheticShop.Filters;
 using AestheticShop.Middlewares;
 using AestheticShop.Models;
+using AestheticShop.Models.Identity;
 using AestheticShop.Services;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -13,9 +17,14 @@ builder.Services.AddDbContext<ShopDbContext>(option =>
 {
     option.UseSqlServer(builder.Configuration.GetConnectionString("SqlServer"));
 });
+builder.Services.AddIdentity<AppUser, IdentityRole>().AddEntityFrameworkStores<ShopDbContext>().AddDefaultTokenProviders();
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<IUserManager, UserManager>();
-
+builder.Services.AddScoped<AuthorizeFilter>();
+builder.Services.AddControllersWithViews(o =>
+{
+    //o.Filters.Add<MyActionFilter>(); //будет работать при переходе на любую страницу
+});
 var app = builder.Build();
 app.UseStaticFiles();
 app.UseMiddleware<AuthMiddleware>();
@@ -33,7 +42,7 @@ app.UseHttpsRedirection();
 
 
 app.UseRouting();
-
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllerRoute(
@@ -42,6 +51,6 @@ app.MapControllerRoute(
 app.MapControllerRoute(
     name: "default",
     //pattern: "{controller=Product}/{action=Index}/{categoryId?}/{tagId?}");
-    pattern: "{controller=Product}/{action=Index}/{id?}");
+    pattern: "{controller=Account}/{action=Login}/{id?}");
 
 app.Run();

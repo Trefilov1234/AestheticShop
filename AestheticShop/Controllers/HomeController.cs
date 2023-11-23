@@ -1,5 +1,7 @@
-﻿using AestheticShop.Models;
+﻿using AestheticShop.Filters;
+using AestheticShop.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Filters;
 using System.Diagnostics;
 
 namespace AestheticShop.Controllers
@@ -17,7 +19,9 @@ namespace AestheticShop.Controllers
         {
             return View();
         }
-
+        //[MyActionFilter(Message ="Hello Filtration!")]//реализация фильтрации через атрибут
+        //  [TypeFilter(typeof(AuthorizeFilter))] //реализация фильтрации если есть конструктор в классе атрибута
+        [MyAuthorizationFilter]
         public IActionResult Privacy()
         {
             return View();
